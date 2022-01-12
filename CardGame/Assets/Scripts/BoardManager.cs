@@ -17,12 +17,8 @@ public class BoardManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            EndTurn();
-        }
     }
-    void EndTurn()
+    public void EndTurn()
     {
         //Movement
         for (int i = 0; i < 4; ++i)
@@ -43,7 +39,7 @@ public class BoardManager : MonoBehaviour
             {
                 if (board[i, j] != null)
                 {
-                    board[i, j].GetComponent<UnitScript>().moved = false;
+                    board[i, j].GetComponent<UnitScript>().ResetMovement();
                     Attack(i, j);
                 }
             }
@@ -56,7 +52,7 @@ public class BoardManager : MonoBehaviour
             {
                 if (board[i, j] != null)
                 {
-                    if (board[i, j].GetComponent<UnitScript>().currHealth <= 0)
+                    if (board[i, j].GetComponent<UnitScript>().GetHealth() <= 0)
                     {
                         GameObject.Destroy(board[i, j]);
                         board[i, j] = null;
@@ -68,29 +64,34 @@ public class BoardManager : MonoBehaviour
 
     void Move(int i, int j)
     {
-        if( board[i, j].GetComponent<UnitScript>().moved)
-            return;
-        int newJ = j;
-        bool isPlayer = board[i, j].GetComponent<UnitScript>().isPlayer;
-        if (isPlayer)
+        while (board[i, j].GetComponent<UnitScript>().GetMovement() > 0)
         {
-            if (newJ != 5)
-                newJ++;
-        }
-        else
-        {
-            if (newJ != 0)
-                newJ--;
-        }
-        if (newJ != j && board[i, newJ] == null)
-        {
-            board[i, j].GetComponent<UnitScript>().moved = true;
-            if(isPlayer)
-                board[i, j].transform.Translate(new Vector3(0, 0, -2));
+            int newJ = j;
+            bool isPlayer = board[i, j].GetComponent<UnitScript>().isPlayer;
+            if (isPlayer)
+            {
+                if (newJ != 5)
+                    newJ++;
+            }
             else
-                board[i, j].transform.Translate(new Vector3(0, 0, 2));
-            board[i, newJ] = board[i, j];
-            board[i, j] = null;
+            {
+                if (newJ != 0)
+                    newJ--;
+            }
+            if (newJ != j && board[i, newJ] == null)
+            {
+                board[i, j].GetComponent<UnitScript>().ReduceMovement();
+                if (isPlayer)
+                    board[i, j].transform.Translate(new Vector3(0, 0, -2));
+                else
+                    board[i, j].transform.Translate(new Vector3(0, 0, 2));
+                board[i, newJ] = board[i, j];
+                board[i, j] = null;
+                j = newJ;
+            }
+            else {
+                return;
+            }
         }
     }
     void Attack(int i, int j)
@@ -109,7 +110,7 @@ public class BoardManager : MonoBehaviour
         //If attacking square has unit and is of diff player
         if (board[i, newJ] != null && (board[i, newJ].GetComponent<UnitScript>().isPlayer != board[i, j].GetComponent<UnitScript>().isPlayer))
         {
-            board[i, newJ].GetComponent<UnitScript>().currHealth -= board[i, j].GetComponent<UnitScript>().currAttack;
+            board[i, newJ].GetComponent<UnitScript>().DamageUnit(board[i, j].GetComponent<UnitScript>().GetAttack());
         }
 
     }
