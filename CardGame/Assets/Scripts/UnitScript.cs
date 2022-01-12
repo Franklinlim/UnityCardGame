@@ -5,6 +5,8 @@ using UnityEngine;
 public class UnitScript : MonoBehaviour
 {
     public Unit unit;
+    int currHealth;
+    int currAttack;
     int currMovement;
 
     public bool isPlayer;
@@ -12,7 +14,12 @@ public class UnitScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ResetMovement();                  
+        ResetMovement();
+        currHealth = unit.health;
+        currAttack = unit.attack;
+        gameObject.transform.GetChild(0).GetComponent<TextMesh>().text = currAttack.ToString();
+        gameObject.transform.GetChild(1).GetComponent<TextMesh>().text = currHealth.ToString();
+        gameObject.transform.GetChild(2).GetComponent<TextMesh>().text = unit.name;
     }
 
     // Update is called once per frame
@@ -22,17 +29,18 @@ public class UnitScript : MonoBehaviour
     }
     public void DamageUnit(int damage)
     {
-        unit.health -= damage;
-        if (unit.health < 0)
-            unit.health = 0;
+        currHealth -= damage;
+        if (currHealth < 0)
+            currHealth = 0;
+        gameObject.transform.GetChild(1).GetComponent<TextMesh>().text = currHealth.ToString();
     }
     public int GetAttack()
     {
-        return unit.attack;
+        return currAttack;
     }
     public int GetHealth()
     {
-        return unit.health;
+        return currHealth;
     }
     public int GetMovement()
     {

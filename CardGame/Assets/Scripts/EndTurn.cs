@@ -26,6 +26,7 @@ public class EndTurn : MonoBehaviour
                     mainCam.GetComponent<BoardManager>().EndTurn();
                     mainCam.GetComponent<Deck>().EndTurn();
                     mainCam.GetComponent<Hand>().EndTurn();
+                    mainCam.GetComponent<AI>().EndTurn();
                 }
             }
 

@@ -9,7 +9,6 @@ public class Hand : MonoBehaviour
     public List<GameObject> unitsInHandDisplay = new List<GameObject>();
     public List<GameObject> lanesToPlace = new List<GameObject>();
     public GameObject baseCard;
-    public GameObject baseUnit;
     Deck deckMan;
     BoardManager boardMan;
 
@@ -49,15 +48,11 @@ public class Hand : MonoBehaviour
                     }
                     else
                     {
-
                         for (int i = 0; i < lanesToPlace.Count; ++i)
                         {
                             if (hit.transform.gameObject == lanesToPlace[i])
                             {
-                                if (boardMan.board[i, 0] == null)
-                                {
-                                    boardMan.board[i, 0] = GameObject.Instantiate(baseUnit, new Vector3(3 - i * 2, 0, 5), Quaternion.identity, null);
-                                    boardMan.board[i, 0].GetComponent<UnitScript>().unit = unitsInHand[i];
+                                if(boardMan.AddUnitToBoard(i, unitsInHand[selectedCard], true)) { 
 
                                     GameObject.Destroy(unitsInHandDisplay[selectedCard]);
                                     unitsInHandDisplay.RemoveAt(selectedCard);
@@ -69,7 +64,6 @@ public class Hand : MonoBehaviour
                         }
                         ShowCards();
                     }
-
                 }
                 else
                 {
@@ -80,8 +74,6 @@ public class Hand : MonoBehaviour
             {
                 ShowCards();
             }
-
-
         }
     }
 

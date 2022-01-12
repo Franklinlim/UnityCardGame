@@ -5,14 +5,33 @@ using UnityEngine;
 public class BoardManager : MonoBehaviour
 {
     public GameObject[,] board = new GameObject[4, 6];
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
+    public GameObject baseUnit;
+    public Material redMat;
+    public bool AddUnitToBoard(int lane, Unit unitType, bool isPlayer) {
 
-    // Update is called once per frame
-    void Update()
-    {
+        if (isPlayer)
+        {
+            if (board[lane, 0] == null)
+            {
+                board[lane, 0] = GameObject.Instantiate(baseUnit, new Vector3(3 - lane * 2, 0, 5), Quaternion.identity, null);
+                board[lane, 0].GetComponent<UnitScript>().unit = unitType;
+                board[lane, 0].GetComponent<UnitScript>().isPlayer = true;
+                return true;
+            }
+            return false;
+        }
+        else
+        {
+            if (board[lane, 5] == null)
+            {
+                board[lane, 5] = GameObject.Instantiate(baseUnit, new Vector3(3 - lane * 2, 0, -5), Quaternion.identity, null);
+                board[lane, 5].GetComponent<UnitScript>().unit = unitType;
+                board[lane, 5].GetComponent<UnitScript>().isPlayer = false;
+                board[lane, 5].GetComponent<MeshRenderer>().material = redMat;
+                return true;
+            }
+            return false;
+        }
     }
     public void EndTurn()
     {
@@ -66,12 +85,12 @@ public class BoardManager : MonoBehaviour
             bool isPlayer = board[i, j].GetComponent<UnitScript>().isPlayer;
             if (isPlayer)
             {
-                if (newJ != 5)
+                if (newJ != 4)
                     newJ++;
             }
             else
             {
-                if (newJ != 0)
+                if (newJ != 1)
                     newJ--;
             }
             if (newJ != j && board[i, newJ] == null)
@@ -92,22 +111,32 @@ public class BoardManager : MonoBehaviour
     }
     void Attack(int i, int j)
     {
-        int newJ = j;
-        if (board[i, j].GetComponent<UnitScript>().isPlayer)
+        //Set starting/min range
+        int tempRange = 0;
+        if (board[i, j].GetComponent<UnitScript>().unit.effect == AllEffects.Trebuchet)
+            tempRange = 1;
+        //Check if has enemy and increase until max range
+        while (tempRange++ < board[i, j].GetComponent<UnitScript>().unit.range)
         {
-            if (newJ != 5)
-                newJ++;
+            int newJ = j;
+            if (board[i, j].GetComponent<UnitScript>().isPlayer)
+            {
+                newJ += tempRange;
+                if (newJ > 5)
+                    newJ = 5;
+            }
+            else
+            {
+                newJ -= tempRange;
+                if (newJ < 0)
+                    newJ = 0;
+            }
+            //If attacking square has unit and is of diff player
+            if (board[i, newJ] != null && (board[i, newJ].GetComponent<UnitScript>().isPlayer != board[i, j].GetComponent<UnitScript>().isPlayer))
+            {
+                board[i, newJ].GetComponent<UnitScript>().DamageUnit(board[i, j].GetComponent<UnitScript>().GetAttack());
+                return;
+            }
         }
-        else
-        {
-            if (newJ != 0)
-                newJ--;
-        }
-        //If attacking square has unit and is of diff player
-        if (board[i, newJ] != null && (board[i, newJ].GetComponent<UnitScript>().isPlayer != board[i, j].GetComponent<UnitScript>().isPlayer))
-        {
-            board[i, newJ].GetComponent<UnitScript>().DamageUnit(board[i, j].GetComponent<UnitScript>().GetAttack());
-        }
-
     }
 }

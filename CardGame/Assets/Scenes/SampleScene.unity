@@ -1727,6 +1727,7 @@ GameObject:
   - component: {fileID: 963194230}
   - component: {fileID: 963194232}
   - component: {fileID: 963194231}
+  - component: {fileID: 963194229}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1799,6 +1800,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 52, y: 180, z: 0}
+--- !u!114 &963194229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fa587314ba71ed49b542e1285b035f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &963194230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1811,6 +1824,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31b079d7ae26143428b2095d511fdf59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  baseUnit: {fileID: 8907247254420143962, guid: c83acff9abdd69248a07f26069e28d29, type: 3}
+  redMat: {fileID: 2100000, guid: 5a0be8569be29e64892084c48ed92d1e, type: 2}
 --- !u!114 &963194231
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1850,7 +1865,6 @@ MonoBehaviour:
   - {fileID: 669440037}
   - {fileID: 451311624}
   baseCard: {fileID: 5262134671184529053, guid: 4772d51ab013a8542ac807f3db14a9f3, type: 3}
-  baseUnit: {fileID: 8907247254420143962, guid: c83acff9abdd69248a07f26069e28d29, type: 3}
 --- !u!1 &972527239
 GameObject:
   m_ObjectHideFlags: 0
