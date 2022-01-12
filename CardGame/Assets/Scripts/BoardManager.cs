@@ -5,13 +5,9 @@ using UnityEngine;
 public class BoardManager : MonoBehaviour
 {
     public GameObject[,] board = new GameObject[4, 6];
-    public GameObject a;
-    public GameObject b;
     // Start is called before the first frame update
     void Start()
     {
-        board[0, 0] = a;
-        board[0, 5] = b;
     }
 
     // Update is called once per frame

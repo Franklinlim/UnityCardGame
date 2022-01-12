@@ -8,14 +8,6 @@ public class Deck : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //Base deck
-        UnitTypeManager unitMan = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<UnitTypeManager>();
-        unitsInDeck.Add(unitMan.allUnitTypes[(int)UnitType.Swordman]);
-        unitsInDeck.Add(unitMan.allUnitTypes[(int)UnitType.Swordman]);
-        unitsInDeck.Add(unitMan.allUnitTypes[(int)UnitType.Archer]);
-        unitsInDeck.Add(unitMan.allUnitTypes[(int)UnitType.Archer]);
-        unitsInDeck.Add(unitMan.allUnitTypes[(int)UnitType.Spearman]);
-        unitsInDeck.Add(unitMan.allUnitTypes[(int)UnitType.Spearman]);
         EndTurn();
     }
 

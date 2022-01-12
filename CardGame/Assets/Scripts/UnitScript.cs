@@ -4,23 +4,14 @@ using UnityEngine;
 
 public class UnitScript : MonoBehaviour
 {
-
-    int currHealth;
-    int currAttack;
-    UnitType unitType;
+    public Unit unit;
     int currMovement;
 
     public bool isPlayer;
 
-    UnitTypeManager unitMan;
-
-
     // Start is called before the first frame update
     void Start()
     {
-        unitMan = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<UnitTypeManager>();
-        currHealth = unitMan.allUnitTypes[(int)unitType].health;
-        currAttack = unitMan.allUnitTypes[(int)unitType].attack;
         ResetMovement();                  
     }
 
@@ -31,21 +22,17 @@ public class UnitScript : MonoBehaviour
     }
     public void DamageUnit(int damage)
     {
-        currHealth -= damage;
-        if (currHealth < 0)
-            currHealth = 0;
+        unit.health -= damage;
+        if (unit.health < 0)
+            unit.health = 0;
     }
     public int GetAttack()
     {
-        return currAttack;
-    }
-    public UnitType GetUnitType()
-    {
-        return unitType;
+        return unit.attack;
     }
     public int GetHealth()
     {
-        return currHealth;
+        return unit.health;
     }
     public int GetMovement()
     {
@@ -56,7 +43,7 @@ public class UnitScript : MonoBehaviour
         currMovement--;
     }
     public void ResetMovement() {
-        if(unitMan.allUnitTypes[(int)unitType].effect == AllEffects.Calvary || unitMan.allUnitTypes[(int)unitType].effect == AllEffects.Horse)
+        if(unit.effect == AllEffects.Calvary || unit.effect == AllEffects.Horse)
         {
             currMovement = 2;
         }
