@@ -5,12 +5,16 @@ using UnityEngine;
 public class Hand : MonoBehaviour
 {
     int cardsToDraw = 4;
+    int maxMana = 3;
+    int currMana;
     public List<Unit> unitsInHand = new List<Unit>();
     public List<GameObject> unitsInHandDisplay = new List<GameObject>();
     public List<GameObject> lanesToPlace = new List<GameObject>();
     public GameObject baseCard;
     Deck deckMan;
     BoardManager boardMan;
+
+    public GameObject manaHandler;
 
     int selectedCard = -1;
     // Start is called before the first frame update
@@ -37,7 +41,8 @@ public class Hand : MonoBehaviour
                     {
                         for (int i = 0; i < unitsInHandDisplay.Count; ++i)
                         {
-                            if (hit.transform.gameObject == unitsInHandDisplay[i])
+                            //Select Card
+                            if (hit.transform.gameObject == unitsInHandDisplay[i] && currMana >= unitsInHand[i].manaCost)
                             {
                                 HideCards();
                                 selectedCard = i;
@@ -52,8 +57,11 @@ public class Hand : MonoBehaviour
                         {
                             if (hit.transform.gameObject == lanesToPlace[i])
                             {
-                                if(boardMan.AddUnitToBoard(i, unitsInHand[selectedCard], true)) { 
+                                //Play Card
+                                if(boardMan.AddUnitToBoard(i, unitsInHand[selectedCard], true)) {
 
+                                    currMana -= unitsInHand[i].manaCost;
+                                    UpdateManaUI();
                                     GameObject.Destroy(unitsInHandDisplay[selectedCard]);
                                     unitsInHandDisplay.RemoveAt(selectedCard);
                                     unitsInHand.RemoveAt(selectedCard);
@@ -100,7 +108,8 @@ public class Hand : MonoBehaviour
     }
     public void EndTurn() 
     {
-
+        currMana = maxMana;
+        UpdateManaUI();
         for (int i = 0; i < unitsInHandDisplay.Count; ++i) {
             GameObject.Destroy(unitsInHandDisplay[i]);
         }
@@ -110,6 +119,18 @@ public class Hand : MonoBehaviour
         {
             unitsInHand.Add(deckMan.unitsInDeck[i]);
             unitsInHandDisplay.Add(GameObject.Instantiate(baseCard,new Vector3(2 - i * 1.5f ,3, 7),Quaternion.Euler(new Vector3(152,180,180)), this.transform));
+        }
+
+    }
+    void UpdateManaUI()
+    {
+        for (int i = 0; i < maxMana; ++i)
+        {
+            manaHandler.transform.GetChild(i + 1).gameObject.SetActive(false);
+        }
+        for (int i = 0; i < currMana; ++i) 
+        {
+            manaHandler.transform.GetChild(i + 1).gameObject.SetActive(true);
         }
 
     }

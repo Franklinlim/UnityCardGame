@@ -8,6 +8,7 @@ public class UnitScript : MonoBehaviour
     int currHealth;
     int currAttack;
     int currMovement;
+    int damageTaken;
 
     public bool isPlayer;
 
@@ -22,6 +23,8 @@ public class UnitScript : MonoBehaviour
         gameObject.transform.GetChild(2).GetComponent<TextMesh>().text = unit.name;
         if (isPlayer)
             gameObject.transform.GetChild(3).transform.Rotate(new Vector3(0, 180, 0));
+        else
+            gameObject.transform.GetChild(1).GetComponent<TextMesh>().color = Color.red;
     }
 
     // Update is called once per frame
@@ -32,9 +35,9 @@ public class UnitScript : MonoBehaviour
     public void DamageUnit(int damage)
     {
         currHealth -= damage;
+        damageTaken = damage;
         if (currHealth < 0)
             currHealth = 0;
-        gameObject.transform.GetChild(1).GetComponent<TextMesh>().text = currHealth.ToString();
     }
     public int GetAttack()
     {
@@ -59,4 +62,21 @@ public class UnitScript : MonoBehaviour
     public void ResetMovement() {
         currMovement = unit.movement;
     }
+    public void UpdateHealth() {
+        //Update health shown later so that it coincides with attacking animation
+        gameObject.transform.GetChild(1).GetComponent<TextMesh>().text = currHealth.ToString();
+        if (damageTaken != 0)
+        {
+            gameObject.transform.GetChild(4).gameObject.SetActive(true);
+            gameObject.transform.GetChild(4).GetComponent<TextMesh>().text = "-"+damageTaken.ToString();
+            StartCoroutine(SetInactiveWait());
+        }
+    }
+    public IEnumerator SetInactiveWait()
+    {
+        yield return new WaitForSeconds(0.5f);
+        gameObject.transform.GetChild(4).gameObject.SetActive(false);
+        damageTaken = 0;
+    }
 }
+

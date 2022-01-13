@@ -14,6 +14,5 @@ public class AI : MonoBehaviour
 
     public void EndTurn() {
         boardMan.AddUnitToBoard(Random.Range(0, 4), GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Deck>().unitsInDeck[0], false);
-    
     }
 }

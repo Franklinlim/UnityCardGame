@@ -15,6 +15,8 @@ public class EndTurn : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!mainCam.GetComponent<BoardManager>().GetDoneTurn())
+            return;
         if (Input.GetMouseButtonDown(0))
         {
             RaycastHit hit;
@@ -23,10 +25,10 @@ public class EndTurn : MonoBehaviour
             {
                 if (hit.transform != null && hit.transform.gameObject == this.gameObject)
                 {
+                    mainCam.GetComponent<AI>().EndTurn();
                     mainCam.GetComponent<BoardManager>().EndTurn();
                     mainCam.GetComponent<Deck>().EndTurn();
                     mainCam.GetComponent<Hand>().EndTurn();
-                    mainCam.GetComponent<AI>().EndTurn();
                 }
             }
 
