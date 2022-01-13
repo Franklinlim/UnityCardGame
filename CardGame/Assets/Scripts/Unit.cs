@@ -10,5 +10,6 @@ public class Unit : ScriptableObject
     public int attack;
     public int health;
     public int range;
-    public AllEffects effect;
+    public int movement;
+    public GameObject model;
 }

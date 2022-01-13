@@ -1824,8 +1824,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31b079d7ae26143428b2095d511fdf59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseUnit: {fileID: 8907247254420143962, guid: c83acff9abdd69248a07f26069e28d29, type: 3}
-  redMat: {fileID: 2100000, guid: 5a0be8569be29e64892084c48ed92d1e, type: 2}
 --- !u!114 &963194231
 MonoBehaviour:
   m_ObjectHideFlags: 0

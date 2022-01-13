@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a81f7309d715c645b8950616520518d, type: 3}
   m_Name: Swordman
   m_EditorClassIdentifier: 
-  unitName: SwordMan
+  unitName: Swordman
   manaCost: 1
   attack: 1
   health: 2
   range: 1
-  effect: 0
+  movement: 1
+  model: {fileID: 8907247254420143962, guid: 34bdd508d736db44d8db72d531d18dde, type: 3}

@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: Spearman
   manaCost: 2
-  attack: 2
-  health: 3
+  attack: 3
+  health: 2
   range: 1
-  effect: 0
+  movement: 1
+  model: {fileID: 8907247254420143962, guid: 9502b28d8615dcb47b607fdd0a4a553d, type: 3}

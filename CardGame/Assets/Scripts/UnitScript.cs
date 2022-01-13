@@ -20,6 +20,8 @@ public class UnitScript : MonoBehaviour
         gameObject.transform.GetChild(0).GetComponent<TextMesh>().text = currAttack.ToString();
         gameObject.transform.GetChild(1).GetComponent<TextMesh>().text = currHealth.ToString();
         gameObject.transform.GetChild(2).GetComponent<TextMesh>().text = unit.name;
+        if (isPlayer)
+            gameObject.transform.GetChild(3).transform.Rotate(new Vector3(0, 180, 0));
     }
 
     // Update is called once per frame
@@ -50,14 +52,11 @@ public class UnitScript : MonoBehaviour
     {
         currMovement--;
     }
+    public void ZeroMovement()
+    {
+        currMovement = 0;
+    }
     public void ResetMovement() {
-        if(unit.effect == AllEffects.Calvary || unit.effect == AllEffects.Horse)
-        {
-            currMovement = 2;
-        }
-        else
-        {
-            currMovement = 1;
-        }
+        currMovement = unit.movement;
     }
 }
