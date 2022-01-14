@@ -109,7 +109,7 @@ public class BoardManager : MonoBehaviour
             }
         } while (unitMoved);
         
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(2.1f);
         //Damage Castle if unit at last row
         for (int i = 0; i < 4; ++i)
         {
@@ -130,6 +130,7 @@ public class BoardManager : MonoBehaviour
     }
     bool Move(int i, int j)
     {
+        int origJ = j;
         bool unitMoved = false;
         while (board[i, j].GetComponent<UnitScript>().GetMovement() > 0)
         {
@@ -149,10 +150,7 @@ public class BoardManager : MonoBehaviour
             {
                 board[i, j].GetComponent<UnitScript>().ReduceMovement();
                 board[i, j].GetComponentInChildren<Animator>().SetBool("Run", true);
-                if (isPlayer)
-                    StartCoroutine(MoveAnimated(board[i, j], board[i, j].transform.position + new Vector3(0, 0, -2), 2f));
-                else
-                    StartCoroutine(MoveAnimated(board[i, j], board[i, j].transform.position + new Vector3(0, 0, 2), 2f));
+                StartCoroutine(MoveAnimated(board[i, j], board[i, j].transform.position + new Vector3(0, 0, -2 * (newJ - origJ)), 2f));
                 board[i, newJ] = board[i, j];
                 board[i, j] = null;
                 j = newJ;

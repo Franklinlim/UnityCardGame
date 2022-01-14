@@ -12,4 +12,5 @@ public class Unit : ScriptableObject
     public int range;
     public int movement;
     public GameObject model;
+    public Material icon;
 }

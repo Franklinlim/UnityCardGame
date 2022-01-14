@@ -19,3 +19,4 @@ MonoBehaviour:
   range: 1
   movement: 1
   model: {fileID: 8907247254420143962, guid: ac42c82af6422c34ea6a3dca08745156, type: 3}
+  icon: {fileID: 2100000, guid: c8e2588e1a1d87e4992493df8996879a, type: 2}

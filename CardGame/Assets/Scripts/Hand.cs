@@ -28,7 +28,6 @@ public class Hand : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         if (Input.GetMouseButtonDown(0))
         {
             RaycastHit hit;
@@ -60,7 +59,7 @@ public class Hand : MonoBehaviour
                                 //Play Card
                                 if(boardMan.AddUnitToBoard(i, unitsInHand[selectedCard], true)) {
 
-                                    currMana -= unitsInHand[i].manaCost;
+                                    currMana -= unitsInHand[selectedCard].manaCost;
                                     UpdateManaUI();
                                     GameObject.Destroy(unitsInHandDisplay[selectedCard]);
                                     unitsInHandDisplay.RemoveAt(selectedCard);
@@ -108,6 +107,7 @@ public class Hand : MonoBehaviour
     }
     public void EndTurn() 
     {
+        //Reset and draw cards
         currMana = maxMana;
         UpdateManaUI();
         for (int i = 0; i < unitsInHandDisplay.Count; ++i) {
@@ -117,8 +117,12 @@ public class Hand : MonoBehaviour
         unitsInHand.Clear();
         for (int i = 0; i < cardsToDraw; ++i)
         {
-            unitsInHand.Add(deckMan.unitsInDeck[i]);
-            unitsInHandDisplay.Add(GameObject.Instantiate(baseCard,new Vector3(2 - i * 1.5f ,3, 7),Quaternion.Euler(new Vector3(152,180,180)), this.transform));
+            Unit unit = deckMan.unitsInDeck[i];
+            unitsInHand.Add(unit);
+            GameObject go = GameObject.Instantiate(baseCard, new Vector3(2 - i * 1.5f, 6.3f, 8.7f), Quaternion.Euler(new Vector3(152, 180, 180)), this.transform);
+            go.GetComponent<Card>().unit = unit;
+            go.GetComponent<Card>().Init();
+            unitsInHandDisplay.Add(go);
         }
 
     }
