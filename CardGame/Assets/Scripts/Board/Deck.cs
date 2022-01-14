@@ -30,4 +30,8 @@ public class Deck : MonoBehaviour
             Swap(ref unitsInDeck, i, Random.Range(i + 1, unitsInDeck.Count));
         }
     }
+    public void AddCard(Unit unit) {
+        unitsInDeck.Add(unit);
+        EndTurn();
+    }
 }

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: Dog Warrior
   manaCost: 1
-  attack: 1
+  attack: 2
   health: 2
   range: 1
   movement: 2

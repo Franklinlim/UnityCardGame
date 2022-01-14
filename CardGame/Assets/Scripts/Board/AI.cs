@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class AI : MonoBehaviour
 {
+    public GameObject board;
     BoardManager boardMan;
     // Start is called before the first frame update
     void Start()
     {
-        boardMan = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<BoardManager>();
+        boardMan = board.GetComponent<BoardManager>();
 
     }
 
     public void EndTurn() {
-        boardMan.AddUnitToBoard(Random.Range(0, 4), GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Deck>().unitsInDeck[0], false);
+        boardMan.AddUnitToBoard(Random.Range(0, 4), GetComponent<Deck>().unitsInDeck[0], false);
+        GetComponent<Deck>().EndTurn();
     }
 }

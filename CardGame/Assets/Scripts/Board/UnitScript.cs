@@ -12,8 +12,7 @@ public class UnitScript : MonoBehaviour
 
     public bool isPlayer;
 
-    // Start is called before the first frame update
-    void Start()
+    public void Init()
     {
         ResetMovement();
         currHealth = unit.health;
@@ -22,16 +21,15 @@ public class UnitScript : MonoBehaviour
         gameObject.transform.GetChild(1).GetComponent<TextMesh>().text = currHealth.ToString();
         gameObject.transform.GetChild(2).GetComponent<TextMesh>().text = unit.name;
         if (isPlayer)
-            gameObject.transform.GetChild(3).transform.Rotate(new Vector3(0, 180, 0));
+        {
+            gameObject.transform.GetChild(3).transform.rotation = Quaternion.Euler(new Vector3(0, 180, 0));
+        }
         else
+        {
             gameObject.transform.GetChild(1).GetComponent<TextMesh>().color = Color.red;
+        }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
     public void DamageUnit(int damage)
     {
         currHealth -= damage;

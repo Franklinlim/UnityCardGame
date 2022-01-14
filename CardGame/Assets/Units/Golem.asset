@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Golem
   m_EditorClassIdentifier: 
   unitName: Golem
-  manaCost: 4
+  manaCost: 3
   attack: 3
-  health: 6
+  health: 5
   range: 1
   movement: 1
   model: {fileID: 8907247254420143962, guid: 08e2ec983307841439bac349a78d25d5, type: 3}

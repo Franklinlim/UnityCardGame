@@ -20,14 +20,16 @@ public class Hand : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        deckMan = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Deck>();
-        boardMan = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<BoardManager>();
+        deckMan = GetComponent<Deck>();
+        boardMan = GetComponent<BoardManager>();
         EndTurn();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!boardMan.GetDoneTurn())
+            return;
         if (Input.GetMouseButtonDown(0))
         {
             RaycastHit hit;

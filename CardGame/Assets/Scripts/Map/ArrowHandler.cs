@@ -2,20 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EndTurn : MonoBehaviour
+public class ArrowHandler : MonoBehaviour
 {
-    GameObject mainCam;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        mainCam = GameObject.FindGameObjectWithTag("MainCamera");
-    }
+    public GameObject target;
+    public GameObject MapManager;
 
     // Update is called once per frame
     void Update()
     {
-        if (!mainCam.GetComponent<BoardManager>().GetDoneTurn())
+        if (!transform.parent.GetComponent<EventHandler>().IsCleared())
+            return;
+        if (MapManager.GetComponent<MapManager>().currentPos != transform.parent.gameObject)
             return;
         if (Input.GetMouseButtonDown(0))
         {
@@ -25,10 +22,9 @@ public class EndTurn : MonoBehaviour
             {
                 if (hit.transform != null && hit.transform.gameObject == this.gameObject)
                 {
-                    mainCam.GetComponent<AI>().EndTurn();
-                    mainCam.GetComponent<BoardManager>().EndTurn();
-                    mainCam.GetComponent<Deck>().EndTurn();
-                    mainCam.GetComponent<Hand>().EndTurn();
+                    MapManager.GetComponent<MapManager>().currentPos = target;
+                    MapManager.GetComponent<MapManager>().UpdateCurrentPosMarker();
+                    target.GetComponent<EventHandler>().StartEvent();
                 }
             }
 

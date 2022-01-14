@@ -9,6 +9,8 @@ public class BoardManager : MonoBehaviour
     bool doneTurn = true;
     public GameObject playerHealthHandler;
     public GameObject enemyHealthHandler;
+    public GameObject map;
+    public GameObject canvas;
 
     float timeForAttack = 0;
     int playerCastleHealth = 10;
@@ -23,6 +25,7 @@ public class BoardManager : MonoBehaviour
                 board[lane, 0] = GameObject.Instantiate(unitType.model, new Vector3(3 - lane * 2, 0, 5), Quaternion.identity, null);
                 board[lane, 0].GetComponent<UnitScript>().unit = unitType;
                 board[lane, 0].GetComponent<UnitScript>().isPlayer = true;
+                board[lane, 0].GetComponent<UnitScript>().Init();
                 return true;
             }
             return false;
@@ -34,6 +37,7 @@ public class BoardManager : MonoBehaviour
                 board[lane, 5] = GameObject.Instantiate(unitType.model, new Vector3(3 - lane * 2, 0, -5), Quaternion.identity, null);
                 board[lane, 5].GetComponent<UnitScript>().unit = unitType;
                 board[lane, 5].GetComponent<UnitScript>().isPlayer = false;
+                board[lane, 5].GetComponent<UnitScript>().Init();
                 return true;
             }
             return false;
@@ -126,7 +130,10 @@ public class BoardManager : MonoBehaviour
             }
         }
         UpdateHealthUI();
-       doneTurn = true;
+        doneTurn = true;
+        if (enemyCastleHealth <= 0) {
+            BackToMap();
+        }
     }
     bool Move(int i, int j)
     {
@@ -229,5 +236,37 @@ public class BoardManager : MonoBehaviour
             enemyHealthHandler.transform.GetChild(i + 1).gameObject.SetActive(true);
         }
 
+    }
+    public void HealPlayer(int amt) {
+        playerCastleHealth += amt;
+        if (playerCastleHealth > 10)
+            playerCastleHealth = 10;
+        UpdateHealthUI();
+    }
+    void BackToMap() {
+
+        enemyCastleHealth = 10;
+        for (int i = 0; i < 4; ++i)
+        {
+            for (int j = 0; j < 6; ++j)
+            {
+                if (board[i, j] != null)
+                {
+                    board[i, j].GetComponentInChildren<Death>().Kill();
+                    board[i, j] = null;
+                    
+                }
+            }
+        }
+        StartCoroutine(Wait());
+
+    }
+    public IEnumerator Wait()
+    {
+        yield return new WaitForSeconds(1);
+        UpdateHealthUI();
+        map.SetActive(true);
+        canvas.SetActive(false);
+        gameObject.SetActive(false);
     }
 }
