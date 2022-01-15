@@ -20,3 +20,4 @@ MonoBehaviour:
   movement: 2
   model: {fileID: 8907247254420143962, guid: 86f91510f41c32448b5277d027d17546, type: 3}
   icon: {fileID: 2100000, guid: d9152444f52d0414f975bf39be695911, type: 2}
+  attackSFX: {fileID: 8300000, guid: b0c1abd0649fdfd428d028574a0805fe, type: 3}

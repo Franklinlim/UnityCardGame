@@ -10,7 +10,7 @@ public class Card : MonoBehaviour
     int mana;
     public void Init()
     {
-
+        //Init Card details
         attack = unit.attack;
         health = unit.health;
         mana = unit.manaCost;

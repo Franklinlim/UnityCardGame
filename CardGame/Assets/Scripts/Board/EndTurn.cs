@@ -8,9 +8,9 @@ public class EndTurn : MonoBehaviour
     public GameObject AI;
 
 
-    // Update is called once per frame
     void Update()
     {
+        //Check if board is done and can press
         if (!board.GetComponent<BoardManager>().GetDoneTurn())
             return;
         if (Input.GetMouseButtonDown(0))
@@ -21,6 +21,7 @@ public class EndTurn : MonoBehaviour
             {
                 if (hit.transform != null && hit.transform.gameObject == this.gameObject)
                 {
+                    //Run all systems end turn
                     AI.GetComponent<AI>().EndTurn();
                     board.GetComponent<BoardManager>().EndTurn();
                     board.GetComponent<Deck>().EndTurn();

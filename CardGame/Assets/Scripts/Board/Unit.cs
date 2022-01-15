@@ -13,4 +13,5 @@ public class Unit : ScriptableObject
     public int movement;
     public GameObject model;
     public Material icon;
+    public AudioClip attackSFX;
 }

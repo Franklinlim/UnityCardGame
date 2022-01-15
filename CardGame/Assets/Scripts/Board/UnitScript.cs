@@ -9,11 +9,14 @@ public class UnitScript : MonoBehaviour
     int currAttack;
     int currMovement;
     int damageTaken;
+    bool hasAttacked;
 
     public bool isPlayer;
 
     public void Init()
     {
+        //Init all stats and facing direction
+        hasAttacked = false;
         ResetMovement();
         currHealth = unit.health;
         currAttack = unit.attack;
@@ -28,6 +31,7 @@ public class UnitScript : MonoBehaviour
         {
             gameObject.transform.GetChild(1).GetComponent<TextMesh>().color = Color.red;
         }
+        GetComponent<AudioSource>().clip = unit.attackSFX;
     }
 
     public void DamageUnit(int damage)
@@ -48,6 +52,13 @@ public class UnitScript : MonoBehaviour
     public int GetMovement()
     {
         return currMovement;
+    }
+    public bool GetHasAttacked()
+    {
+        return hasAttacked;
+    }
+    public void SetHasAttacked(bool att) {
+        hasAttacked = att;
     }
     public void ReduceMovement()
     {
@@ -72,6 +83,7 @@ public class UnitScript : MonoBehaviour
     }
     public IEnumerator SetInactiveWait()
     {
+        //Hide damage taken number
         yield return new WaitForSeconds(0.5f);
         gameObject.transform.GetChild(4).gameObject.SetActive(false);
         damageTaken = 0;

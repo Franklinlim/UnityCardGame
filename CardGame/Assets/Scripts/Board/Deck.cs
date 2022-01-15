@@ -11,13 +11,8 @@ public class Deck : MonoBehaviour
         EndTurn();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     void Swap(ref List<Unit> d, int i, int j) {
+        //Swap cards in deck
         Unit temp = d[i];
         d[i] = d[j];
         d[j] = temp;
@@ -30,7 +25,9 @@ public class Deck : MonoBehaviour
             Swap(ref unitsInDeck, i, Random.Range(i + 1, unitsInDeck.Count));
         }
     }
-    public void AddCard(Unit unit) {
+    public void AddCard(Unit unit)
+    {
+        //Add unit to Deck
         unitsInDeck.Add(unit);
         EndTurn();
     }

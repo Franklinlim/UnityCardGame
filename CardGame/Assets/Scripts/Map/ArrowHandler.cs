@@ -10,7 +10,8 @@ public class ArrowHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!transform.parent.GetComponent<EventHandler>().IsCleared())
+        //Check if can click on that arro
+        if (!transform.parent.GetComponent<EventHandler>().isCleared)
             return;
         if (MapManager.GetComponent<MapManager>().currentPos != transform.parent.gameObject)
             return;
@@ -22,6 +23,7 @@ public class ArrowHandler : MonoBehaviour
             {
                 if (hit.transform != null && hit.transform.gameObject == this.gameObject)
                 {
+                    //Play event and update pos
                     MapManager.GetComponent<MapManager>().currentPos = target;
                     MapManager.GetComponent<MapManager>().UpdateCurrentPosMarker();
                     target.GetComponent<EventHandler>().StartEvent();

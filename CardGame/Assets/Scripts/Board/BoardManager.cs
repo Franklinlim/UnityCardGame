@@ -11,13 +11,20 @@ public class BoardManager : MonoBehaviour
     public GameObject enemyHealthHandler;
     public GameObject map;
     public GameObject canvas;
+    public GameObject loseScreen;
+    public GameObject victoryScreen;
 
     float timeForAttack = 0;
     int playerCastleHealth = 10;
     int enemyCastleHealth = 10;
 
+    private void Start()
+    {
+        GetComponent<AudioSource>().playOnAwake = true;
+    }
     public bool AddUnitToBoard(int lane, Unit unitType, bool isPlayer) {
 
+        //Init units added to board with its details 
         if (isPlayer)
         {
             if (board[lane, 0] == null)
@@ -50,7 +57,7 @@ public class BoardManager : MonoBehaviour
     }
     IEnumerator Waiter()
     {
-        //Attacking
+        //Check if any units can attack
         for (int i = 0; i < 4; ++i)
         {
             for (int j = 0; j < 6; ++j)
@@ -62,8 +69,10 @@ public class BoardManager : MonoBehaviour
                 }
             }
         }
+        //If an attack occurs
         if (timeForAttack > 0)
         {
+            //Wait for animation, update health and play sounds
             yield return new WaitForSeconds(timeForAttack);
             for (int i = 0; i < 4; ++i)
                 for (int j = 0; j < 6; ++j)
@@ -71,7 +80,9 @@ public class BoardManager : MonoBehaviour
                     {
                         board[i, j].GetComponentInChildren<Animator>().SetBool("Attack", false);
                         board[i, j].GetComponent<UnitScript>().UpdateHealth();
-                    }   
+                        if(board[i, j].GetComponent<UnitScript>().GetHasAttacked())
+                            board[i, j].GetComponent<AudioSource>().Play();
+                    }
 
             yield return new WaitForSeconds(timeForAttack);
 
@@ -90,12 +101,14 @@ public class BoardManager : MonoBehaviour
                     }
                 }
             }
+            //Waiting for animation
             timeForAttack = 0;
             yield return new WaitForSeconds(2);
         }
 
 
         //Movement
+        //Repeat movement until all units have moved or cannot move
         bool unitMoved;
         do
         {
@@ -112,12 +125,12 @@ public class BoardManager : MonoBehaviour
                 }
             }
         } while (unitMoved);
-        
+
         yield return new WaitForSeconds(2.1f);
         //Damage Castle if unit at last row
         for (int i = 0; i < 4; ++i)
         {
-            if (board[i, 0] != null && !board[i, 0].GetComponent<UnitScript>().isPlayer) { 
+            if (board[i, 0] != null && !board[i, 0].GetComponent<UnitScript>().isPlayer) {
                 playerCastleHealth -= board[i, 0].GetComponent<UnitScript>().unit.manaCost;
                 GameObject.Destroy(board[i, 0]);
                 board[i, 0] = null;
@@ -131,12 +144,26 @@ public class BoardManager : MonoBehaviour
         }
         UpdateHealthUI();
         doneTurn = true;
-        if (enemyCastleHealth <= 0) {
-            BackToMap();
+        //Check win lose condition
+        if (playerCastleHealth <= 0)
+        {
+            GetComponent<AudioSource>().Stop();
+            loseScreen.SetActive(true);
+            doneTurn = false;
+        }else if (enemyCastleHealth <= 0) {
+            if (map.GetComponent<MapManager>().atBoss) {
+                GetComponent<AudioSource>().Stop();
+                victoryScreen.SetActive(true);
+                doneTurn = false;
+            }
+            else
+                BackToMap();
         }
     }
     bool Move(int i, int j)
     {
+        //Check next square if unit can move there
+        //Loop for its movement speed
         int origJ = j;
         bool unitMoved = false;
         while (board[i, j].GetComponent<UnitScript>().GetMovement() > 0)
@@ -155,6 +182,7 @@ public class BoardManager : MonoBehaviour
             }
             if (newJ != j && board[i, newJ] == null)
             {
+                //If cna move there, animate the movement and play animation
                 board[i, j].GetComponent<UnitScript>().ReduceMovement();
                 board[i, j].GetComponentInChildren<Animator>().SetBool("Run", true);
                 StartCoroutine(MoveAnimated(board[i, j], board[i, j].transform.position + new Vector3(0, 0, -2 * (newJ - origJ)), 2f));
@@ -165,13 +193,14 @@ public class BoardManager : MonoBehaviour
             }
             else
             {
-                return false ;
+                return false;
             }
         }
         return unitMoved;
     }
     public IEnumerator MoveAnimated(GameObject go, Vector3 tgt, float time)
     {
+        //Animating the movement
         float elapsedTime = 0;
         Vector3 startingPos = go.transform.position;
         while (elapsedTime < time)
@@ -207,9 +236,10 @@ public class BoardManager : MonoBehaviour
             //If attacking square has unit and is of diff player
             if (board[i, newJ] != null && (board[i, newJ].GetComponent<UnitScript>().isPlayer != board[i, j].GetComponent<UnitScript>().isPlayer))
             {
-                board[i, j].GetComponentInChildren<Animator>().SetBool("Attack",true);
+                board[i, j].GetComponentInChildren<Animator>().SetBool("Attack", true);
                 board[i, newJ].GetComponent<UnitScript>().DamageUnit(board[i, j].GetComponent<UnitScript>().GetAttack());
                 board[i, j].GetComponent<UnitScript>().ZeroMovement();
+                board[i, j].GetComponent<UnitScript>().SetHasAttacked(true);
                 //If there are attacks
                 timeForAttack = 1;
                 return;
@@ -222,6 +252,7 @@ public class BoardManager : MonoBehaviour
     }
     void UpdateHealthUI()
     {
+        //Updating the UI for both player health
         for (int i = 0; i < 10; ++i)
         {
             playerHealthHandler.transform.GetChild(i + 1).gameObject.SetActive(false);
@@ -237,6 +268,7 @@ public class BoardManager : MonoBehaviour
         }
 
     }
+    //Heal event used in map
     public void HealPlayer(int amt) {
         playerCastleHealth += amt;
         if (playerCastleHealth > 10)
@@ -244,7 +276,7 @@ public class BoardManager : MonoBehaviour
         UpdateHealthUI();
     }
     void BackToMap() {
-
+        //Kill off everything
         enemyCastleHealth = 10;
         for (int i = 0; i < 4; ++i)
         {
@@ -254,15 +286,16 @@ public class BoardManager : MonoBehaviour
                 {
                     board[i, j].GetComponentInChildren<Death>().Kill();
                     board[i, j] = null;
-                    
+
                 }
             }
         }
-        StartCoroutine(Wait());
+        StartCoroutine(WaitReset());
 
     }
-    public IEnumerator Wait()
+    public IEnumerator WaitReset()
     {
+        //Return to map after fight
         yield return new WaitForSeconds(1);
         UpdateHealthUI();
         map.SetActive(true);

@@ -11,6 +11,7 @@ public class Hand : MonoBehaviour
     public List<GameObject> unitsInHandDisplay = new List<GameObject>();
     public List<GameObject> lanesToPlace = new List<GameObject>();
     public GameObject baseCard;
+    public AudioClip errorSFX;
     Deck deckMan;
     BoardManager boardMan;
 
@@ -34,6 +35,7 @@ public class Hand : MonoBehaviour
         {
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            //Handle select and playing of cards
             if (Physics.Raycast(ray, out hit, 100.0f))
             {
                 if (hit.transform != null)
@@ -43,17 +45,25 @@ public class Hand : MonoBehaviour
                         for (int i = 0; i < unitsInHandDisplay.Count; ++i)
                         {
                             //Select Card
-                            if (hit.transform.gameObject == unitsInHandDisplay[i] && currMana >= unitsInHand[i].manaCost)
+                            if (hit.transform.gameObject == unitsInHandDisplay[i])
                             {
-                                HideCards();
-                                selectedCard = i;
-                                return;
+                                //Checking for manacost
+                                if (currMana >= unitsInHand[i].manaCost)
+                                {
+                                    HideCards();
+                                    selectedCard = i;
+                                    return;
+                                }
+                                else {
+                                    GetComponent<AudioSource>().PlayOneShot(errorSFX);
+                                }
                             }
                         }
                         ShowCards();
                     }
                     else
                     {
+                        //Placing Card
                         for (int i = 0; i < lanesToPlace.Count; ++i)
                         {
                             if (hit.transform.gameObject == lanesToPlace[i])
@@ -71,7 +81,9 @@ public class Hand : MonoBehaviour
                                 }
                             }
                         }
+                        //If lane not clicked after selecting card
                         ShowCards();
+                        GetComponent<AudioSource>().PlayOneShot(errorSFX);
                     }
                 }
                 else
@@ -88,6 +100,7 @@ public class Hand : MonoBehaviour
 
     void HideCards() 
     {
+        //Push cards down to show more of map
         if (selectedCard != -1)
             return;
         for (int i = 0; i < unitsInHandDisplay.Count; ++i)
@@ -98,6 +111,7 @@ public class Hand : MonoBehaviour
     }
     void ShowCards()
     {
+        //Bring cards back up to select
         if (selectedCard == -1)
             return;
         for (int i = 0; i < unitsInHandDisplay.Count; ++i)
@@ -128,8 +142,11 @@ public class Hand : MonoBehaviour
         }
 
     }
+
+
     void UpdateManaUI()
     {
+        //Update UI
         for (int i = 0; i < maxMana; ++i)
         {
             manaHandler.transform.GetChild(i + 1).gameObject.SetActive(false);

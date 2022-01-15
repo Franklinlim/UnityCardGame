@@ -14,6 +14,7 @@ public class AI : MonoBehaviour
     }
 
     public void EndTurn() {
+        //Add the first card from their deck then shuffle it
         boardMan.AddUnitToBoard(Random.Range(0, 4), GetComponent<Deck>().unitsInDeck[0], false);
         GetComponent<Deck>().EndTurn();
     }
