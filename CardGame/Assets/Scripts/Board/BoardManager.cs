@@ -21,6 +21,14 @@ public class BoardManager : MonoBehaviour
     private void Start()
     {
         GetComponent<AudioSource>().playOnAwake = true;
+        if (PlayerPrefs.HasKey("Health"))
+        {
+            playerCastleHealth = PlayerPrefs.GetInt("Health");
+            map.GetComponent<MapManager>().SetCurrentPos(PlayerPrefs.GetInt("BoardPos"));
+            map.SetActive(true);
+            canvas.SetActive(false);
+            gameObject.SetActive(false);
+        }
     }
     public bool AddUnitToBoard(int lane, Unit unitType, bool isPlayer) {
 
@@ -144,14 +152,23 @@ public class BoardManager : MonoBehaviour
         }
         UpdateHealthUI();
         doneTurn = true;
+
+        //Save map pos and health
+        PlayerPrefs.SetInt("Health", playerCastleHealth);
+        PlayerPrefs.SetInt("BoardPos", map.GetComponent<MapManager>().GetCurrentPos());
+
         //Check win lose condition
         if (playerCastleHealth <= 0)
         {
+            PlayerPrefs.DeleteAll();
             GetComponent<AudioSource>().Stop();
             loseScreen.SetActive(true);
             doneTurn = false;
-        }else if (enemyCastleHealth <= 0) {
-            if (map.GetComponent<MapManager>().atBoss) {
+        }else if (enemyCastleHealth <= 0)
+        {
+            if (map.GetComponent<MapManager>().atBoss)
+            {
+                PlayerPrefs.DeleteAll();
                 GetComponent<AudioSource>().Stop();
                 victoryScreen.SetActive(true);
                 doneTurn = false;

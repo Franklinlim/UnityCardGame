@@ -57,4 +57,20 @@ public class MapManager : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
         go.SetActive(false);
     }
+    public int GetCurrentPos()
+    {
+        for (int mapPos = 0; mapPos < transform.childCount; ++mapPos)
+        {
+            if (currentPos.transform == transform.GetChild(mapPos))
+            {
+                return mapPos;
+            }
+        }
+        return -1;
+    }
+    public void SetCurrentPos(int pos)
+    {
+        currentPos = transform.GetChild(pos).gameObject;
+        UpdateCurrentPosMarker();
+    }
 }
