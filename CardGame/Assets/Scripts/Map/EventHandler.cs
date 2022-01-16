@@ -17,8 +17,6 @@ public class EventHandler : MonoBehaviour
     {
         if (isStart && !isCleared)
         {
-            Debug.Log(isStart);
-            Debug.Log(isCleared);
             StartEvent(gameObject);
         }
     }
@@ -28,23 +26,24 @@ public class EventHandler : MonoBehaviour
         if (eventType == EventTypes.Heal)
         {
             transform.parent.GetComponent<MapManager>().HealEvent();
-            transform.GetComponentInParent<MapManager>().currentPos = target;
-            transform.GetComponentInParent<MapManager>().UpdateCurrentPosMarker();
-            transform.GetComponentInParent<MapManager>().SaveGame();
+            transform.parent.GetComponent<MapManager>().currentPos = target;
+            transform.parent.GetComponent<MapManager>().UpdateCurrentPosMarker();
+            transform.parent.GetComponent<MapManager>().SaveGame();
         }
         else if (eventType == EventTypes.Card)
         {
             transform.parent.GetComponent<MapManager>().CardEvent();
-            transform.GetComponentInParent<MapManager>().currentPos = target;
-            transform.GetComponentInParent<MapManager>().UpdateCurrentPosMarker();
-            transform.GetComponentInParent<MapManager>().SaveGame();
+            transform.parent.GetComponent<MapManager>().currentPos = target;
+            transform.parent.GetComponent<MapManager>().UpdateCurrentPosMarker();
+            transform.parent.GetComponent<MapManager>().SaveGame();
         }
         else
         {
+            transform.parent.GetComponent<MapManager>().SaveGame();
+            transform.parent.GetComponent<MapManager>().currentPos = target;
+            transform.parent.GetComponent<MapManager>().UpdateCurrentPosMarker();
             transform.parent.GetComponent<MapManager>().FightEvent(ref GetComponent<Deck>().unitsInDeck);
-            transform.GetComponentInParent<MapManager>().SaveGame();
-            transform.GetComponentInParent<MapManager>().currentPos = target;
-            transform.GetComponentInParent<MapManager>().UpdateCurrentPosMarker();
+
         }
         isCleared = true;
     }
