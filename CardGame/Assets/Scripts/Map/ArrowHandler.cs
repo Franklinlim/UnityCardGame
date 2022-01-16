@@ -23,14 +23,10 @@ public class ArrowHandler : MonoBehaviour
             {
                 if (hit.transform != null && hit.transform.gameObject == this.gameObject)
                 {
-                    //Play event and update pos
-                    MapManager.GetComponent<MapManager>().currentPos = target;
-                    MapManager.GetComponent<MapManager>().UpdateCurrentPosMarker();
-                    target.GetComponent<EventHandler>().StartEvent();
+                    //Play event
+                    target.GetComponent<EventHandler>().StartEvent(target);
                 }
             }
-
-
         }
     }
 }

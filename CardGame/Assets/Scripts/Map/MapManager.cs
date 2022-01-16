@@ -22,6 +22,11 @@ public class MapManager : MonoBehaviour
     private void Start()
     {
         GetComponent<AudioSource>().playOnAwake = true;
+        if (PlayerPrefs.HasKey("Health"))
+        {
+            boardManager.GetComponent<BoardManager>().LoadHealth();
+            SetCurrentPos(PlayerPrefs.GetInt("BoardPos"));
+        }
     }
     public void UpdateCurrentPosMarker()
     {
@@ -57,20 +62,29 @@ public class MapManager : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
         go.SetActive(false);
     }
-    public int GetCurrentPos()
+    public void SaveMapPos()
     {
-        for (int mapPos = 0; mapPos < transform.childCount; ++mapPos)
+        int mapPos = 0;
+        for (; mapPos < transform.childCount; ++mapPos)
         {
             if (currentPos.transform == transform.GetChild(mapPos))
             {
-                return mapPos;
+                break;
             }
         }
-        return -1;
+        PlayerPrefs.SetInt("BoardPos", mapPos);
     }
     public void SetCurrentPos(int pos)
     {
         currentPos = transform.GetChild(pos).gameObject;
+        for (int i = 0; i <= pos; ++i) {
+            transform.GetChild(i).GetComponent<EventHandler>().isCleared = true;
+        }
         UpdateCurrentPosMarker();
+    }
+    public void SaveGame() {
+
+        boardManager.GetComponent<BoardManager>().SaveHealth();
+        SaveMapPos();
     }
 }
